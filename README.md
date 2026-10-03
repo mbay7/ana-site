@@ -1,3 +1,12 @@
-# ana. — marketing site
+---
+title: ana.
+emoji: ✨
+colorFrom: navy
+colorTo: blue
+sdk: static
+pinned: false
+---
 
-The I in every brand. Static landing page for ana, the AI brand assistant built by mblab.ai.
+# ana. — The I in every brand
+
+Marketing site for ana, the AI brand assistant built by mblab.ai. Knows your catalogue, speaks your voice, remembers every customer.
