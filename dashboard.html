@@ -208,32 +208,42 @@ const goto = (name) => {
 items.forEach(i => i.addEventListener('click', () => goto(i.dataset.screen)));
 document.querySelectorAll('[data-goto]').forEach(b => b.addEventListener('click', () => goto(b.dataset.goto)));
 
-// test connection (simulated — backend wires here)
+// ---- API config (set these for your deployment) ----
+const API_BASE = '';   // e.g. 'https://mbay7-ana-api.hf.space'
+const API_TOKEN = '';  // bearer token that protects the backend
+const AUTH = { 'Content-Type': 'application/json', ...(API_TOKEN ? { 'Authorization': 'Bearer ' + API_TOKEN } : {}) };
+
+const api = (path, opts) => {
+  if (!API_BASE) return Promise.reject(new Error('no-api'));
+  return fetch(API_BASE + path, opts).then(r => { if (!r.ok) throw new Error('http ' + r.status); return r.json(); });
+};
+
+// ---- Connect: store the model key (encrypted server-side), then mark connected ----
 document.querySelectorAll('.test-btn').forEach(btn => {
+  const field = btn.parentElement.querySelector('input');
   const status = btn.parentElement.querySelector('.status');
   btn.addEventListener('click', () => {
+    const secret = field.value.trim();
+    if (!secret) { status.textContent = 'enter a key'; status.className = 'status untested'; return; }
     status.textContent = 'testing'; status.className = 'status testing';
-    setTimeout(() => { status.textContent = 'connected'; status.className = 'status ok'; }, 900);
+    api('/vault/keys', { method: 'POST', headers: AUTH, body: JSON.stringify({ name: 'demo:openrouter', secret }) })
+      .then(() => { status.textContent = 'connected'; status.className = 'status ok'; })
+      .catch(() => { status.textContent = 'backend offline'; status.className = 'status untested'; });
   });
 });
 
-// chat (simulated grounded reply — backend wires here)
+// ---- Test: chat against the real engine ----
 const log = document.getElementById('chatLog');
 const input = document.getElementById('chatInput');
 const send = document.getElementById('sendBtn');
-const replies = [
-  'Yes, the Hydra-Rich Cream is our best for dry skin, with hyaluronic acid and shea butter.',
-  'We have three shades in stock. The Light is gentle for sensitive skin.',
-  'Shipping is 2 to 3 days, and it\'s free over $40.'
-];
-let ri = 0;
 const sendMsg = () => {
   const t = input.value.trim(); if (!t) return;
   const u = document.createElement('div'); u.className = 'bubble user'; u.textContent = t; log.appendChild(u);
   input.value = '';
   const a = document.createElement('div'); a.className = 'bubble ana'; a.textContent = '…'; log.appendChild(a);
-  const reply = replies[ri % replies.length]; ri++;
-  setTimeout(() => { a.textContent = reply; }, 600);
+  api('/assistants/demo/chat', { method: 'POST', headers: AUTH, body: JSON.stringify({ question: t }) })
+    .then(r => { a.textContent = r.answer; })
+    .catch(() => { a.textContent = 'Backend not connected yet. Set API_BASE above once the API is deployed, and this chat answers for real.'; });
   log.scrollTop = log.scrollHeight;
 };
 send.addEventListener('click', sendMsg);
