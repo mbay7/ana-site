@@ -1,8 +1,8 @@
 ---
 title: ana.
 emoji: ✨
-colorFrom: navy
-colorTo: blue
+colorFrom: indigo
+colorTo: indigo
 sdk: static
 pinned: false
 ---
