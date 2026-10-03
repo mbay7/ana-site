@@ -1,6 +1,7 @@
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const Motion = window.Motion;
 
-/* ---- canvas particle field (the night sky waking) ---- */
+/* ---- canvas particle field (the night sky) ---- */
 const canvas = document.getElementById('bg');
 if (canvas && !reduced) {
   const ctx = canvas.getContext('2d');
@@ -39,19 +40,20 @@ if (canvas && !reduced) {
   draw();
 }
 
-/* ---- streaming ---- */
-const stream = document.getElementById('stream');
-const sub = document.getElementById('sub');
-const actions = document.getElementById('heroActions');
-const demo = document.getElementById('demo');
-const userMsg = document.getElementById('userMsg');
-const answerEl = document.getElementById('answer');
-const sources = document.getElementById('sources');
-
+/* ---- elements ---- */
+const els = {
+  dot: document.querySelector('.wake-dot'),
+  wordmark: document.querySelector('.wordmark'),
+  heroLine: document.querySelector('.hero-line'),
+  sub: document.getElementById('sub'),
+  actions: document.getElementById('heroActions'),
+  demo: document.getElementById('demo'),
+  stream: document.getElementById('stream'),
+  answer: document.getElementById('answer'),
+  sources: document.getElementById('sources')
+};
 const headline = 'Every brand. Its own I.';
 const answer = 'Yes — the Hydra-Rich Cream. It\'s our best for dry skin, with hyaluronic acid and shea butter, and it\'s in stock.';
-
-function reveal(el) { if (el) el.classList.add('reveal'); }
 
 function typeInto(el, text, onDone) {
   const words = text.split(' ');
@@ -65,22 +67,33 @@ function typeInto(el, text, onDone) {
   })();
 }
 
-if (reduced) {
-  stream.textContent = headline;
-  answerEl.textContent = answer;
-  ['sub', 'heroActions', 'demo', 'userMsg', 'sources'].forEach(id => reveal(document.getElementById(id)));
-  document.querySelectorAll('.reveal-on-scroll').forEach(el => el.classList.add('in'));
+/* cursor blink (transition, not keyframes) */
+const cursors = document.querySelectorAll('.cursor');
+if (!reduced) setInterval(() => cursors.forEach(c => c.classList.toggle('off')), 520);
+
+const spring = (el, kf, opts) => Motion && Motion.animate(el, kf, { type: 'spring', stiffness: 170, damping: 26, ...opts });
+
+/* ---- play ---- */
+if (reduced || !Motion) {
+  els.stream.textContent = headline;
+  els.answer.textContent = answer;
+  document.querySelectorAll('[data-motion]').forEach(el => el.style.opacity = 1);
+  els.sources.style.opacity = 1;
 } else {
+  els.sources.style.opacity = 0;
+  spring(els.dot, { opacity: [0.25, 1], scale: [0.4, 1] }, { stiffness: 200, damping: 22 });
+  setTimeout(() => spring(els.wordmark, { opacity: [0, 1], y: [18, 0] }), 220);
   setTimeout(() => {
-    typeInto(stream, headline, () => {
-      reveal(sub); reveal(actions); reveal(demo);
-      setTimeout(() => {
-        reveal(userMsg);
-        setTimeout(() => typeInto(answerEl, answer, () => reveal(sources)), 500);
-      }, 550);
-    });
-  }, 1500);
+    spring(els.heroLine, { opacity: [0, 1] });
+    typeInto(els.stream, headline, onHeadline);
+  }, 850);
+  setTimeout(() => spring(els.demo, { opacity: [0, 1], y: [22, 0] }), 1000);
+
+  function onHeadline() {
+    spring(els.sub, { opacity: [0, 1] });
+    spring(els.actions, { opacity: [0, 1] });
+    setTimeout(() => typeInto(els.answer, answer, () => {
+      Motion.animate(els.sources, { opacity: [0, 1] });
+    }), 600);
+  }
 }
-
-/* Note: no scroll-reveal by design — one signature motion only (the hero wake), everything else stays visible for robustness. */
-

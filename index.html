@@ -5,9 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>ana. — The I in every brand</title>
 <meta name="description" content="ana. is the AI assistant that knows your catalogue, speaks your voice, and remembers every customer. Grounded, self-serve, your brand." />
+<script>document.documentElement.classList.add('js');</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Inter:wght@400;500;600&family=Poppins:wght@600&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -29,24 +30,24 @@
     <canvas id="bg" aria-hidden="true"></canvas>
     <div class="hero-grid">
       <div class="hero-copy">
-        <span class="wake-dot" aria-hidden="true"></span>
-        <h1 class="wordmark">ana<span class="accent">.</span></h1>
-        <p class="hero-line" aria-live="polite"><span id="stream"></span><span class="cursor">▍</span></p>
-        <p class="sub" id="sub">ana. knows your catalogue, speaks in your voice, and remembers every customer. Your brand, remembered.</p>
-        <div class="hero-actions" id="heroActions">
+        <span class="wake-dot" data-motion aria-hidden="true"></span>
+        <h1 class="wordmark" data-motion>ana<span class="accent">.</span></h1>
+        <p class="hero-line" data-motion aria-live="polite"><span id="stream"></span><span class="cursor" id="cursor">▍</span></p>
+        <p class="sub" data-motion id="sub">ana. knows your catalogue, speaks in your voice, and remembers every customer. Your brand, remembered.</p>
+        <div class="hero-actions" data-motion id="heroActions">
           <a class="btn btn-primary" href="https://shopassist-agent.streamlit.app" target="_blank" rel="noopener">Meet ana</a>
           <a class="btn btn-secondary" href="#capabilities">See what it does</a>
         </div>
       </div>
 
-      <div class="demo" id="demo">
+      <div class="demo" data-motion id="demo">
         <div class="demo-head">
           <span class="demo-brand">ana<span class="accent">.</span></span>
           <span class="demo-live"><span class="live-dot"></span>live</span>
         </div>
         <div class="chat">
-          <div class="msg msg-user" id="userMsg">Do you have a moisturiser for dry skin?</div>
-          <div class="msg msg-ana"><span id="answer"></span><span class="cursor">▍</span></div>
+          <div class="msg msg-user">Do you have a moisturiser for dry skin?</div>
+          <div class="msg msg-ana"><span id="answer"></span><span class="cursor" id="answerCursor">▍</span></div>
           <div class="sources" id="sources">
             <span class="src">Hydra-Rich Cream</span>
             <span class="src">Skincare</span>
@@ -58,87 +59,92 @@
   </section>
 
   <section class="capabilities" id="capabilities">
-    <p class="kicker">Capabilities</p>
-    <h2>Everything a brand assistant should do</h2>
-    <div class="grid-3">
-      <div class="card"><span class="card-dot"></span><h3>Knows your catalogue</h3><p>Every product, spec, price and stock level, always current and grounded in your own content.</p></div>
-      <div class="card"><span class="card-dot"></span><h3>Speaks your voice</h3><p>Your tone, your words, trained on how you actually talk to customers, never a generic bot.</p></div>
-      <div class="card"><span class="card-dot"></span><h3>Remembers your customers</h3><p>Every conversation picks up where the last one left off. One customer, remembered.</p></div>
-      <div class="card"><span class="card-dot"></span><h3>Answers grounded, not guessed</h3><p>Pulls only from your content and cites its source, so nothing is made up.</p></div>
-      <div class="card"><span class="card-dot"></span><h3>Honest when it doesn't know</h3><p>Says "I don't know" instead of hallucinating. Trust is the whole point.</p></div>
-      <div class="card"><span class="card-dot"></span><h3>Lives on every channel</h3><p>Your website, WhatsApp, Shopify, wherever your customers already are.</p></div>
+    <div class="section-inner">
+      <h2>Everything a brand assistant should do</h2>
+      <div class="cap-list">
+        <div class="cap"><h3>Knows your catalogue</h3><p>Every product, spec, price and stock level, always current and grounded in your own content.</p></div>
+        <div class="cap"><h3>Speaks your voice</h3><p>Your tone, your words, trained on how you actually talk to customers, never a generic bot.</p></div>
+        <div class="cap"><h3>Remembers your customers</h3><p>Every conversation picks up where the last one left off. One customer, remembered.</p></div>
+        <div class="cap"><h3>Answers grounded, not guessed</h3><p>Pulls only from your content and cites its source, so nothing is made up.</p></div>
+        <div class="cap"><h3>Honest when it doesn't know</h3><p>Says "I don't know" instead of hallucinating. Trust is the whole point.</p></div>
+        <div class="cap"><h3>Lives on every channel</h3><p>Your website, WhatsApp, Shopify, wherever your customers already are.</p></div>
+      </div>
     </div>
   </section>
 
   <section class="why-ana" id="why-ana">
-    <p class="kicker">Why ana</p>
-    <h2>Built for the problems costing you money</h2>
-    <div class="usps">
-      <div class="usp"><div class="usp-num">01</div><div><h3>You lose sales every night</h3><p>Questions go unanswered after hours. ana. answers in seconds, 24/7, so no customer walks away because you were asleep.</p></div></div>
-      <div class="usp"><div class="usp-num">02</div><div><h3>A wrong answer costs a customer for good</h3><p>One hallucinated reply and a loyal customer is gone. ana. answers only from your content and says when it doesn't know.</p></div></div>
-      <div class="usp"><div class="usp-num">03</div><div><h3>A generic bot erodes the brand you built</h3><p>Customers can tell a robot. ana. speaks in your voice, so the brand you built by hand still sounds like you.</p></div></div>
-      <div class="usp"><div class="usp-num">04</div><div><h3>Repeat questions burn your team's hours</h3><p>Everyone asks the same twenty things. ana. handles them and remembers each customer, so your people do the work that matters.</p></div></div>
-      <div class="usp"><div class="usp-num">05</div><div><h3>You can't scale support with headcount</h3><p>Hiring support doesn't scale. ana. does, and you keep your keys and your data.</p></div></div>
+    <div class="section-inner">
+      <h2>The problems costing you money</h2>
+      <div class="problems">
+        <div class="problem"><h3>You lose sales every night</h3><p>Questions go unanswered after hours. ana. answers in seconds, 24/7, so no customer walks away because you were asleep.</p></div>
+        <div class="problem"><h3>A wrong answer costs a customer for good</h3><p>One hallucinated reply and a loyal customer is gone. ana. answers only from your content and says when it doesn't know.</p></div>
+        <div class="problem"><h3>A generic bot erodes the brand you built</h3><p>Customers can tell a robot. ana. speaks in your voice, so the brand you built by hand still sounds like you.</p></div>
+        <div class="problem"><h3>Repeat questions burn your team's hours</h3><p>Everyone asks the same twenty things. ana. handles them and remembers each customer, so your people do the work that matters.</p></div>
+        <div class="problem"><h3>You can't scale support with headcount</h3><p>Hiring support doesn't scale. ana. does, and you keep your keys and your data.</p></div>
+      </div>
     </div>
   </section>
 
   <section class="why-us" id="why-us">
-    <p class="kicker">Why us</p>
-    <h2>Built by people who ship, not demo</h2>
-    <p class="lede">mblab builds and evaluates applied AI. We don't show slides, we ship assistants that answer from your real content, and we measure whether they actually help. This is the product we'd want for our own brands.</p>
+    <div class="section-inner">
+      <h2>Built by people who ship, not demo</h2>
+      <p class="lede">mblab builds and evaluates applied AI. We don't show slides, we ship assistants that answer from your real content, and we measure whether they actually help. This is the product we'd want for our own brands.</p>
+    </div>
   </section>
 
   <section class="pricing" id="pricing">
-    <p class="kicker">Pricing</p>
-    <h2>Simple, and you keep your keys</h2>
-    <div class="grid-3">
-      <div class="tier">
-        <h3>Launch</h3>
-        <div class="price">$79<span>/mo</span></div>
-        <ul>
-          <li>One brand, one channel</li>
-          <li>Standard brand voice</li>
-          <li>Up to 500 products</li>
-          <li>Email support</li>
-        </ul>
-        <a class="btn btn-secondary" href="https://shopassist-agent.streamlit.app" target="_blank" rel="noopener">Start</a>
+    <div class="section-inner">
+      <h2>Simple, and you keep your keys</h2>
+      <div class="tiers">
+        <div class="tier">
+          <h3>Launch</h3>
+          <div class="price">$79<span>/mo</span></div>
+          <ul>
+            <li>One brand, one channel</li>
+            <li>Standard brand voice</li>
+            <li>Up to 500 products</li>
+            <li>Email support</li>
+          </ul>
+          <a class="btn btn-secondary" href="https://shopassist-agent.streamlit.app" target="_blank" rel="noopener">Start</a>
+        </div>
+        <div class="tier tier-featured">
+          <span class="flag">Most popular</span>
+          <h3>Growth</h3>
+          <div class="price">$199<span>/mo</span></div>
+          <ul>
+            <li>Multi-channel</li>
+            <li>Custom brand voice</li>
+            <li>Unlimited products</li>
+            <li>Analytics &amp; priority support</li>
+          </ul>
+          <a class="btn btn-primary" href="https://shopassist-agent.streamlit.app" target="_blank" rel="noopener">Start</a>
+        </div>
+        <div class="tier">
+          <h3>Scale</h3>
+          <div class="price">Custom</div>
+          <ul>
+            <li>Multi-brand</li>
+            <li>Dedicated onboarding</li>
+            <li>Custom integrations</li>
+            <li>SLA &amp; white-glove support</li>
+          </ul>
+          <a class="btn btn-secondary" href="https://mblab.ai" target="_blank" rel="noopener">Talk to us</a>
+        </div>
       </div>
-      <div class="tier tier-featured">
-        <span class="flag">Most popular</span>
-        <h3>Growth</h3>
-        <div class="price">$199<span>/mo</span></div>
-        <ul>
-          <li>Multi-channel</li>
-          <li>Custom brand voice</li>
-          <li>Unlimited products</li>
-          <li>Analytics &amp; priority support</li>
-        </ul>
-        <a class="btn btn-primary" href="https://shopassist-agent.streamlit.app" target="_blank" rel="noopener">Start</a>
-      </div>
-      <div class="tier">
-        <h3>Scale</h3>
-        <div class="price">Custom</div>
-        <ul>
-          <li>Multi-brand</li>
-          <li>Dedicated onboarding</li>
-          <li>Custom integrations</li>
-          <li>SLA &amp; white-glove support</li>
-        </ul>
-        <a class="btn btn-secondary" href="https://mblab.ai" target="_blank" rel="noopener">Talk to us</a>
-      </div>
+      <p class="fine">Bring your own model key. You keep your data, and you pay only your own usage.</p>
     </div>
-    <p class="fine">Bring your own model key. You keep your data, and you pay only your own usage.</p>
   </section>
 
   <section class="how" id="how">
-    <p class="kicker">Set up in minutes</p>
-    <h2>Self-serve, start to finish</h2>
-    <ol class="steps">
-      <li><span class="step-num">1</span><div><h3>Connect</h3><p>Paste your keys, Shopify, WhatsApp, OpenRouter. Test each one.</p></div></li>
-      <li><span class="step-num">2</span><div><h3>Teach</h3><p>Give ana. your catalogue, your tone, and your rules.</p></div></li>
-      <li><span class="step-num">3</span><div><h3>Test</h3><p>Chat with it in your dashboard before it goes live.</p></div></li>
-      <li><span class="step-num">4</span><div><h3>Publish</h3><p>One click. ana. is your brand, everywhere.</p></div></li>
-    </ol>
+    <div class="section-inner">
+      <h2>Self-serve, start to finish</h2>
+      <ol class="steps">
+        <li><span class="step-num">1</span><div><h3>Connect</h3><p>Paste your keys, Shopify, WhatsApp, OpenRouter. Test each one.</p></div></li>
+        <li><span class="step-num">2</span><div><h3>Teach</h3><p>Give ana. your catalogue, your tone, and your rules.</p></div></li>
+        <li><span class="step-num">3</span><div><h3>Test</h3><p>Chat with it in your dashboard before it goes live.</p></div></li>
+        <li><span class="step-num">4</span><div><h3>Publish</h3><p>One click. ana. is your brand, everywhere.</p></div></li>
+      </ol>
+    </div>
   </section>
 
 </main>
@@ -149,6 +155,7 @@
   <p class="fine">Built by <a href="https://mblab.ai" target="_blank" rel="noopener">mblab.ai</a></p>
 </footer>
 
-<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/motion@10.16.2/dist/motion.min.js" defer></script>
+<script src="script.js" defer></script>
 </body>
 </html>
