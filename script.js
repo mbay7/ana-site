@@ -82,11 +82,5 @@ if (reduced) {
   }, 1500);
 }
 
-/* ---- reveal on scroll ---- */
-if (!reduced && 'IntersectionObserver' in window) {
-  document.querySelectorAll('.card, .usp, .tier, .steps li, .kicker, h2, .lede').forEach(el => el.classList.add('reveal-on-scroll'));
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal-on-scroll').forEach(el => io.observe(el));
-}
+/* Note: no scroll-reveal by design — one signature motion only (the hero wake), everything else stays visible for robustness. */
+

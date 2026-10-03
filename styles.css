@@ -174,9 +174,7 @@ h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(30px, 
 .fine { color: var(--muted); font-size: 14px; }
 .fine a { color: var(--amber); }
 
-/* reveal on scroll */
-.reveal-on-scroll { opacity: 0; transform: translateY(24px); transition: opacity 0.7s var(--spring), transform 0.7s var(--spring); }
-.reveal-on-scroll.in { opacity: 1; transform: none; }
+/* no scroll-reveal: sections render visible (one signature motion only) */
 
 @media (max-width: 900px) {
   .hero-grid { grid-template-columns: 1fr; gap: 40px; }
