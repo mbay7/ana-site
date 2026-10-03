@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ana. — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --night:#0A0F1E; --deep:#121A2E; --raised:#1A2438; --ink:#EEF1F8; --muted:#8A93A6;
+  --amber:#E2672A; --border:rgba(238,241,248,0.08); --ok:#3FB68B; --radius:14px;
+  --spring:cubic-bezier(0.22,1,0.36,1);
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body { background:var(--night); color:var(--ink); font-family:'Inter',sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased; display:flex; min-height:100vh; }
+a { color:inherit; text-decoration:none; }
+.accent { color:var(--amber); }
+.btn { display:inline-block; font-family:'Inter',sans-serif; font-weight:500; font-size:15px; padding:12px 24px; border-radius:var(--radius); border:1px solid transparent; cursor:pointer; transition:transform .2s var(--spring), box-shadow .2s var(--spring); }
+.btn-primary { background:var(--amber); color:var(--night); }
+.btn-primary:hover { transform:translateY(-2px); box-shadow:0 10px 26px rgba(226,103,42,.35); }
+.btn-ghost { background:transparent; color:var(--ink); border-color:rgba(238,241,248,.2); }
+.btn-ghost:hover { border-color:rgba(238,241,248,.45); }
+.btn-sm { padding:8px 16px; font-size:13px; }
+
+/* sidebar */
+.side { width:240px; flex:0 0 240px; border-right:1px solid var(--border); padding:24px 16px; display:flex; flex-direction:column; gap:4px; position:sticky; top:0; height:100vh; background:var(--night); }
+.side-brand { font-family:'Poppins',sans-serif; font-weight:600; font-size:22px; padding:0 12px 20px; }
+.side a.nav-item { display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:10px; color:var(--muted); font-size:14.5px; transition:background .2s, color .2s; }
+.side a.nav-item:hover { color:var(--ink); background:var(--deep); }
+.side a.nav-item.active { color:var(--ink); background:var(--raised); }
+.nav-ico { width:18px; height:18px; border-radius:6px; display:inline-block; }
+.side-foot { margin-top:auto; padding:12px; font-size:12.5px; color:var(--muted); border-top:1px solid var(--border); }
+
+/* main */
+.main { flex:1; padding:40px 48px; max-width:900px; }
+.main h1 { font-family:'Poppins',sans-serif; font-weight:600; font-size:30px; letter-spacing:-.02em; }
+.main .sub { color:var(--muted); font-size:15px; margin:6px 0 32px; }
+
+.screen { display:none; }
+.screen.active { display:block; }
+
+.card { background:var(--deep); border:1px solid var(--border); border-radius:var(--radius); padding:24px; margin-bottom:16px; }
+.card h3 { font-family:'Poppins',sans-serif; font-size:18px; font-weight:600; margin-bottom:4px; }
+.card .hint { color:var(--muted); font-size:13.5px; margin-bottom:16px; }
+.field { display:flex; gap:10px; align-items:center; }
+.field input, textarea { flex:1; background:var(--raised); border:1px solid var(--border); border-radius:10px; color:var(--ink); padding:12px 14px; font-family:'Inter',sans-serif; font-size:14.5px; }
+.field input:focus, textarea:focus { outline:none; border-color:rgba(226,103,42,.5); }
+textarea { width:100%; min-height:90px; resize:vertical; }
+
+.status { font-size:12.5px; font-weight:500; padding:4px 12px; border-radius:999px; white-space:nowrap; }
+.status.untested { color:var(--muted); background:var(--raised); }
+.status.testing { color:var(--amber); background:rgba(226,103,42,.12); }
+.status.ok { color:var(--ok); background:rgba(63,182,139,.12); }
+
+/* overview progress */
+.progress { display:flex; gap:10px; margin:20px 0 8px; }
+.progress .seg { flex:1; height:6px; border-radius:3px; background:var(--raised); }
+.progress .seg.done { background:var(--amber); }
+
+/* chat */
+.chat { border:1px solid var(--border); border-radius:var(--radius); background:var(--deep); padding:20px; height:380px; display:flex; flex-direction:column; }
+.chat-log { flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:12px; padding-right:6px; }
+.bubble { max-width:80%; padding:11px 15px; border-radius:14px; font-size:14.5px; }
+.bubble.user { align-self:flex-end; background:var(--raised); }
+.bubble.ana { align-self:flex-start; background:rgba(226,103,42,.12); border:1px solid rgba(226,103,42,.28); }
+.chat-input { display:flex; gap:10px; margin-top:14px; }
+.chat-input input { flex:1; }
+
+/* toggle */
+.switch { position:relative; width:48px; height:28px; flex:0 0 48px; }
+.switch input { opacity:0; width:0; height:0; }
+.slider { position:absolute; inset:0; background:var(--raised); border-radius:999px; cursor:pointer; transition:.25s; }
+.slider::before { content:""; position:absolute; width:20px; height:20px; left:4px; top:4px; background:var(--muted); border-radius:50%; transition:.25s; }
+.switch input:checked + .slider { background:var(--amber); }
+.switch input:checked + .slider::before { transform:translateX(20px); background:var(--night); }
+
+@media (max-width:760px) {
+  body { flex-direction:column; }
+  .side { width:100%; flex:none; height:auto; position:static; flex-direction:row; overflow-x:auto; }
+  .side-brand, .side-foot { display:none; }
+  .main { padding:28px 20px; }
+}
+</style>
+</head>
+<body>
+
+<aside class="side">
+  <a class="side-brand" href="/">ana<span class="accent">.</span></a>
+  <a class="nav-item active" data-screen="overview"><span class="nav-ico" style="background:var(--amber)"></span>Overview</a>
+  <a class="nav-item" data-screen="connect"><span class="nav-ico" style="background:var(--raised)"></span>Connect</a>
+  <a class="nav-item" data-screen="teach"><span class="nav-ico" style="background:var(--raised)"></span>Teach</a>
+  <a class="nav-item" data-screen="test"><span class="nav-ico" style="background:var(--raised)"></span>Test</a>
+  <a class="nav-item" data-screen="publish"><span class="nav-ico" style="background:var(--raised)"></span>Publish</a>
+  <div class="side-foot">ana. dashboard · v0.1<br>keys stay yours, stored encrypted</div>
+</aside>
+
+<main class="main">
+
+  <section class="screen active" id="screen-overview">
+    <h1>Welcome back</h1>
+    <p class="sub">Your brand's assistant, set up in four steps.</p>
+    <div class="card">
+      <h3>Setup progress</h3>
+      <div class="progress"><span class="seg"></span><span class="seg"></span><span class="seg"></span><span class="seg"></span></div>
+      <p class="hint" style="margin-top:12px">Connect your keys, teach ana. your voice, test it, then publish.</p>
+      <a class="btn btn-primary" data-goto="connect">Start with Connect</a>
+    </div>
+  </section>
+
+  <section class="screen" id="screen-connect">
+    <h1>Connect</h1>
+    <p class="sub">Bring your own keys. They stay yours, stored encrypted, never shared.</p>
+
+    <div class="card">
+      <h3>Model key</h3>
+      <p class="hint">OpenRouter or OpenAI. ana. uses this to generate answers. You pay your own usage.</p>
+      <div class="field">
+        <input type="password" placeholder="sk-or-… or sk-…" />
+        <button class="btn btn-ghost btn-sm test-btn" data-status>Test</button>
+        <span class="status untested">untested</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Shopify</h3>
+      <p class="hint">Pull your products so ana. knows your catalogue.</p>
+      <div class="field">
+        <input type="password" placeholder="shpat_…" />
+        <button class="btn btn-ghost btn-sm test-btn" data-status>Test</button>
+        <span class="status untested">untested</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>WhatsApp</h3>
+      <p class="hint">Answer customers where they already are.</p>
+      <div class="field">
+        <input type="password" placeholder="access token" />
+        <button class="btn btn-ghost btn-sm test-btn" data-status>Test</button>
+        <span class="status untested">untested</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="screen-teach">
+    <h1>Teach</h1>
+    <p class="sub">Give ana. your catalogue and your voice.</p>
+    <div class="card">
+      <h3>Catalogue</h3>
+      <p class="hint">Drop your products here, a CSV or a link to your store.</p>
+      <div class="field"><input type="text" placeholder="Upload CSV or paste your Shopify store URL" /></div>
+    </div>
+    <div class="card">
+      <h3>Brand voice</h3>
+      <p class="hint">How should ana. sound? Warm, playful, formal? Any rules it must follow.</p>
+      <textarea placeholder="e.g. Friendly and warm, never pushy. Never make medical claims. Always recommend the gentlest product first."></textarea>
+    </div>
+    <button class="btn btn-primary">Save</button>
+  </section>
+
+  <section class="screen" id="screen-test">
+    <h1>Test</h1>
+    <p class="sub">Chat with ana. before it goes live. Ask it the questions your customers ask.</p>
+    <div class="chat">
+      <div class="chat-log" id="chatLog">
+        <div class="bubble ana">Hi, I'm ana. Ask me anything about the products.</div>
+      </div>
+      <div class="chat-input">
+        <input id="chatInput" type="text" placeholder="e.g. Do you have a moisturiser for dry skin?" />
+        <button class="btn btn-primary" id="sendBtn">Send</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="screen-publish">
+    <h1>Publish</h1>
+    <p class="sub">One click, and ana. is your brand everywhere.</p>
+    <div class="card">
+      <h3>Ready to go live</h3>
+      <p class="hint">Confirm everything below, then flip the switch.</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0">
+        <span>Model key connected</span><span class="status ok">connected</span>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0">
+        <span>Catalogue taught</span><span class="status ok">taught</span>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0">
+        <span>Tested and sounding right</span><span class="status ok">passed</span>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-top:1px solid var(--border);margin-top:8px">
+        <span><strong>ana. is live</strong></span>
+        <label class="switch"><input type="checkbox" id="liveToggle"><span class="slider"></span></label>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+const items = document.querySelectorAll('.nav-item');
+const screens = document.querySelectorAll('.screen');
+const goto = (name) => {
+  items.forEach(i => i.classList.toggle('active', i.dataset.screen === name));
+  screens.forEach(s => s.classList.toggle('active', s.id === 'screen-' + name));
+};
+items.forEach(i => i.addEventListener('click', () => goto(i.dataset.screen)));
+document.querySelectorAll('[data-goto]').forEach(b => b.addEventListener('click', () => goto(b.dataset.goto)));
+
+// test connection (simulated — backend wires here)
+document.querySelectorAll('.test-btn').forEach(btn => {
+  const status = btn.parentElement.querySelector('.status');
+  btn.addEventListener('click', () => {
+    status.textContent = 'testing'; status.className = 'status testing';
+    setTimeout(() => { status.textContent = 'connected'; status.className = 'status ok'; }, 900);
+  });
+});
+
+// chat (simulated grounded reply — backend wires here)
+const log = document.getElementById('chatLog');
+const input = document.getElementById('chatInput');
+const send = document.getElementById('sendBtn');
+const replies = [
+  'Yes, the Hydra-Rich Cream is our best for dry skin, with hyaluronic acid and shea butter.',
+  'We have three shades in stock. The Light is gentle for sensitive skin.',
+  'Shipping is 2 to 3 days, and it\'s free over $40.'
+];
+let ri = 0;
+const sendMsg = () => {
+  const t = input.value.trim(); if (!t) return;
+  const u = document.createElement('div'); u.className = 'bubble user'; u.textContent = t; log.appendChild(u);
+  input.value = '';
+  const a = document.createElement('div'); a.className = 'bubble ana'; a.textContent = '…'; log.appendChild(a);
+  const reply = replies[ri % replies.length]; ri++;
+  setTimeout(() => { a.textContent = reply; }, 600);
+  log.scrollTop = log.scrollHeight;
+};
+send.addEventListener('click', sendMsg);
+input.addEventListener('keydown', e => { if (e.key === 'Enter') sendMsg(); });
+</script>
+</body>
+</html>
